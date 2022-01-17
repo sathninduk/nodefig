@@ -1,2 +1,0 @@
-# nodefig
- WordPress upgradation research
